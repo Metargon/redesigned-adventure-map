@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Live Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      html, body, #map { height: 100%; margin: 0; }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      const map = L.map('map').setView([0, 0], 15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19
+      }).addTo(map);
+      const marker = L.marker([0, 0]).addTo(map);
+
+      function updateLocation() {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          marker.setLatLng([lat, lng]);
+          map.setView([lat, lng]);
+        });
+      }
+
+      updateLocation();
+      setInterval(updateLocation, 5000); // aggiorna ogni 5 secondi
+    </script>
+  </body>
+</html>
